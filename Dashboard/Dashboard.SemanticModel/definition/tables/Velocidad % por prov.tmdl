@@ -1,0 +1,54 @@
+table 'Velocidad % por prov'
+	lineageTag: 7c616bd8-67c1-4891-ac7c-a9dff2b42cb3
+
+	column Año
+		dataType: int64
+		formatString: 0
+		lineageTag: 860ed8e7-8599-4210-8688-e57e34c33ddb
+		summarizeBy: none
+		sourceColumn: Año
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre
+		dataType: int64
+		formatString: 0
+		lineageTag: 0c77f774-bf8e-47af-b42e-0ac2b65bc24e
+		summarizeBy: sum
+		sourceColumn: Trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column Provincia
+		dataType: string
+		lineageTag: a1059a9d-fedd-4e39-9cc5-451fbc7433c9
+		summarizeBy: none
+		sourceColumn: Provincia
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mbps (Media de bajada)'
+		dataType: double
+		lineageTag: 0065451c-8739-4934-ba2c-2414668ca882
+		summarizeBy: sum
+		sourceColumn: Mbps (Media de bajada)
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'Velocidad % por prov' = m
+		mode: import
+		source =
+				let
+				    Origen = Excel.Workbook(File.Contents("C:\Users\rubio\Documents\SoyHenry\Proyecto_Individual\Internet.xlsx"), null, true),
+				    #"Velocidad % por prov_Sheet" = Origen{[Item="Velocidad % por prov",Kind="Sheet"]}[Data],
+				    #"Encabezados promovidos" = Table.PromoteHeaders(#"Velocidad % por prov_Sheet", [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"Año", Int64.Type}, {"Trimestre", Int64.Type}, {"Provincia", type text}, {"Mbps (Media de bajada)", type number}})
+				in
+				    #"Tipo cambiado"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

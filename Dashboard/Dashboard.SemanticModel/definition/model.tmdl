@@ -1,0 +1,31 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-419
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["Accesos_tecnologia_localidad","Velocidad % por prov","Totales VMD","Penetracion-totales","Accesos por velocidad","Ingresos","Accesos Por Tecnología","Mapa","Penetración-poblacion","Penetracion-hogares","poblacion-hogar","vel-tec"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBIDesktopVersion = 2.140.1577.0 (25.02)+00af0910c5ca19a229c472b0dfc17a2c488f6b0a
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Accesos_tecnologia_localidad
+ref table 'Velocidad % por prov'
+ref table 'Totales VMD'
+ref table Penetracion-totales
+ref table 'Accesos por velocidad'
+ref table Ingresos
+ref table 'Accesos Por Tecnología'
+ref table Mapa
+ref table Penetración-poblacion
+ref table Penetracion-hogares
+ref table poblacion-hogar
+ref table vel-tec
+
+ref cultureInfo en-US
+

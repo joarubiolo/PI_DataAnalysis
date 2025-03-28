@@ -1,0 +1,55 @@
+table Penetración-poblacion
+	lineageTag: dcb74aaa-d465-4f2c-bc66-ba0a09052476
+
+	column Año
+		dataType: int64
+		formatString: 0
+		lineageTag: 70f12b29-0048-4d4f-abd4-dd342466e749
+		summarizeBy: none
+		sourceColumn: Año
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre
+		dataType: int64
+		formatString: 0
+		lineageTag: 85384ba3-93cb-483e-b7ba-4f41b1363b03
+		summarizeBy: sum
+		sourceColumn: Trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column Provincia
+		dataType: string
+		lineageTag: f4ffa2cc-9568-4f02-a174-57095493327c
+		summarizeBy: none
+		sourceColumn: Provincia
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Accesos por cada 100 hab'
+		dataType: double
+		lineageTag: 811915e9-2b5d-490a-9336-21d92521061b
+		summarizeBy: sum
+		sourceColumn: Accesos por cada 100 hab
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Penetración-poblacion = m
+		mode: import
+		source =
+				let
+				    Origen = Excel.Workbook(File.Contents("C:\Users\rubio\Documents\SoyHenry\Proyecto_Individual\Internet.xlsx"), null, true),
+				    #"Penetración-poblacion_Sheet" = Origen{[Item="Penetración-poblacion",Kind="Sheet"]}[Data],
+				    #"Encabezados promovidos" = Table.PromoteHeaders(#"Penetración-poblacion_Sheet", [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"Año", Int64.Type}, {"Trimestre", Int64.Type}, {"Provincia", type text}, {"Accesos por cada 100 hab", type number}, {"Column5", type any}, {"Column6", type any}, {"Column7", type any}, {"Column8", type any}, {"Column9", type any}, {"Column10", type any}, {"Column11", type any}, {"Column12", type any}, {"Column13", type any}, {"Column14", type any}, {"Column15", type any}, {"Column16", type any}, {"Column17", type any}, {"Column18", type any}}),
+				    #"Columnas quitadas" = Table.RemoveColumns(#"Tipo cambiado",{"Column5", "Column6", "Column7", "Column8", "Column9", "Column10", "Column11", "Column12", "Column13", "Column14", "Column15", "Column16", "Column17", "Column18"})
+				in
+				    #"Columnas quitadas"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegación
+

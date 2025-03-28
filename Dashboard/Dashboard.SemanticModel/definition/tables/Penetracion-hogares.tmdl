@@ -1,0 +1,55 @@
+table Penetracion-hogares
+	lineageTag: 8bd0f81c-5b38-4e21-baaa-b0516d5f5ec0
+
+	column Año
+		dataType: int64
+		formatString: 0
+		lineageTag: e97ed2cd-9671-4597-9ac5-7ac7a3ded457
+		summarizeBy: none
+		sourceColumn: Año
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre
+		dataType: int64
+		formatString: 0
+		lineageTag: 5e60245d-8c7f-4dfc-a1f2-a45342963e3e
+		summarizeBy: sum
+		sourceColumn: Trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column Provincia
+		dataType: string
+		lineageTag: 1f8f2315-eb53-4ec4-937b-fda0fbd8d8d6
+		summarizeBy: none
+		sourceColumn: Provincia
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Accesos por cada 100 hogares'
+		dataType: double
+		lineageTag: 141d4fca-cc66-4b29-85e3-780868efedf5
+		summarizeBy: sum
+		sourceColumn: Accesos por cada 100 hogares
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Penetracion-hogares = m
+		mode: import
+		source =
+				let
+				    Origen = Excel.Workbook(File.Contents("C:\Users\rubio\Documents\SoyHenry\Proyecto_Individual\Internet.xlsx"), null, true),
+				    #"Penetracion-hogares_Sheet" = Origen{[Item="Penetracion-hogares",Kind="Sheet"]}[Data],
+				    #"Encabezados promovidos" = Table.PromoteHeaders(#"Penetracion-hogares_Sheet", [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"Año", Int64.Type}, {"Trimestre", Int64.Type}, {"Provincia", type text}, {"Accesos por cada 100 hogares", type number}, {"Column5", type any}, {"Column6", type any}, {"Column7", type any}, {"Column8", type any}, {"Column9", type any}, {"Column10", type any}, {"Column11", type any}, {"Column12", type any}}),
+				    #"Columnas quitadas" = Table.RemoveColumns(#"Tipo cambiado",{"Column5", "Column6", "Column7", "Column8", "Column9", "Column10", "Column11", "Column12"})
+				in
+				    #"Columnas quitadas"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegación
+

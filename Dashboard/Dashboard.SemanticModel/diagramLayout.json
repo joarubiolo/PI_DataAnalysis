@@ -1,0 +1,176 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 1403.6697247706422,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 568,
+            "y": 53.353515625
+          },
+          "nodeIndex": "Accesos por velocidad",
+          "nodeLineageTag": "f09bbdfd-c37e-4a6f-959b-294c48637a41",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 852,
+            "y": 53.353515625
+          },
+          "nodeIndex": "Accesos_tecnologia_localidad",
+          "nodeLineageTag": "725f9ac3-4b8e-4a64-82da-9736c74ed8d6",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 10,
+            "y": 93.353515625
+          },
+          "nodeIndex": "Penetracion-totales",
+          "nodeLineageTag": "cc1ebe82-d9c8-4175-9622-3f26788a785f",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1136,
+            "y": 115.353515625
+          },
+          "nodeIndex": "Totales VMD",
+          "nodeLineageTag": "cf5968c0-b073-433f-bcff-34f7d9a97a5d",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1420,
+            "y": 115.353515625
+          },
+          "nodeIndex": "Velocidad % por prov",
+          "nodeLineageTag": "7c616bd8-67c1-4891-ac7c-a9dff2b42cb3",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1694,
+            "y": 47.853515625
+          },
+          "nodeIndex": "Ingresos",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1968,
+            "y": 41.978515625
+          },
+          "nodeIndex": "Accesos Por Tecnología",
+          "nodeLineageTag": "64b032a5-710d-4acc-9624-7f8c1aad4a68",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2242,
+            "y": 66.603515625
+          },
+          "nodeIndex": "Mapa",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2516,
+            "y": 37.072265625
+          },
+          "nodeIndex": "Penetracion-hogares",
+          "nodeLineageTag": "8bd0f81c-5b38-4e21-baaa-b0516d5f5ec0",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2800,
+            "y": 37.072265625
+          },
+          "nodeIndex": "Penetración-poblacion",
+          "nodeLineageTag": "dcb74aaa-d465-4f2c-bc66-ba0a09052476",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3074,
+            "y": 78.736328125
+          },
+          "nodeIndex": "poblacion-hogar",
+          "nodeLineageTag": "1506ba8d-eaf5-44a2-9ad7-3db3b4aa0ba6",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3348,
+            "y": 20.498046875
+          },
+          "nodeIndex": "vel-tec",
+          "nodeLineageTag": "b0800db0-4fff-4c87-bc28-679be9094e6f",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas las tablas",
+      "zoomValue": 96.888888888888886,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas las tablas",
+  "defaultDiagram": "Todas las tablas"
+}

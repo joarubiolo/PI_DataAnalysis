@@ -1,0 +1,91 @@
+table poblacion-hogar
+	lineageTag: 1506ba8d-eaf5-44a2-9ad7-3db3b4aa0ba6
+
+	measure TasaPenetracion = ```
+			
+			DIVIDE(
+			    'poblacion-hogar'[total],
+			    SUM('poblacion-hogar'[Accesos por cada 100 hab])
+			) * 100
+			
+			```
+		lineageTag: ff7f34d3-08ca-4bb3-845e-9231a7dbaef6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure KPI =
+			
+			'poblacion-hogar'[total]+('poblacion-hogar'[total]*'poblacion-hogar'[TasaPenetracion]/100)
+		lineageTag: 95c59590-0980-4b12-9235-93ef7b6607e9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure total =
+			SUMX('poblacion-hogar',
+			                'poblacion-hogar'[Accesos por cada 100 hab]+'poblacion-hogar'[Accesos por cada 100 hogares])
+		lineageTag: 3c67f3e2-83b3-49fc-855e-a062c30e806a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Año
+		dataType: int64
+		formatString: 0
+		lineageTag: 7efd7b66-f663-4709-979c-0cd6a873f50e
+		summarizeBy: sum
+		sourceColumn: Año
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre
+		dataType: int64
+		formatString: 0
+		lineageTag: 7a0f891b-9033-4cc1-be4b-d8f47b3df1ff
+		summarizeBy: sum
+		sourceColumn: Trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column Provincia
+		dataType: string
+		lineageTag: bb9a712d-e551-41ab-be04-cc99f09aef08
+		summarizeBy: none
+		sourceColumn: Provincia
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Accesos por cada 100 hab'
+		dataType: double
+		lineageTag: 1f1da02b-552c-4874-8c0a-8fa3fc1dd2b5
+		summarizeBy: sum
+		sourceColumn: Accesos por cada 100 hab
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Accesos por cada 100 hogares'
+		dataType: double
+		lineageTag: e5035201-2b14-4d7c-b123-bc2ff7d72796
+		summarizeBy: sum
+		sourceColumn: Accesos por cada 100 hogares
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition poblacion-hogar = m
+		mode: import
+		source =
+				let
+				    Origen = Excel.Workbook(File.Contents("C:\Users\rubio\Documents\SoyHenry\Proyecto_Individual\hog-pob completo.xlsx"), null, true),
+				    Sheet1_Sheet = Origen{[Item="Sheet1",Kind="Sheet"]}[Data],
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Sheet1_Sheet, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"Column1", Int64.Type}, {"Año", Int64.Type}, {"Trimestre", Int64.Type}, {"Provincia", type text}, {"Accesos por cada 100 hab", type number}, {"Accesos por cada 100 hogares", type number}}),
+				    #"Columnas quitadas" = Table.RemoveColumns(#"Tipo cambiado",{"Column1"})
+				in
+				    #"Columnas quitadas"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

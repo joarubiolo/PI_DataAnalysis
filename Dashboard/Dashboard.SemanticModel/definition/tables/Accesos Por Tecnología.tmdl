@@ -1,0 +1,129 @@
+table 'Accesos Por Tecnología'
+	lineageTag: 64b032a5-710d-4acc-9624-7f8c1aad4a68
+
+	measure PenetracionStarlinkBajaInfraestructura = ```
+			
+			DIVIDE(
+			    SUMX(
+			        'Accesos Por Tecnología', 
+			        'Accesos Por Tecnología'[ADSL] + 'Accesos Por Tecnología'[Wireless]
+			    ),
+			    SUMX(
+			        'Accesos Por Tecnología',
+			        'Accesos Por Tecnología'[ADSL] + 'Accesos Por Tecnología'[Wireless] + 'Accesos Por Tecnología'[Cablemodem] + 'Accesos Por Tecnología'[Fibra óptica] + 'Accesos Por Tecnología'[Otros]
+			    )
+			) * 100
+			
+			```
+		lineageTag: 52a794f9-b164-46c9-85ad-5cc0730fa997
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure KPI4 =
+			
+			(AVERAGE('Accesos Por Tecnología'[ADSL])+AVERAGE('Accesos Por Tecnología'[Wireless]))*'Accesos Por Tecnología'[PenetracionStarlinkBajaInfraestructura]/100
+		lineageTag: 880e0a0e-5557-4dd3-a5d7-371c74632300
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Año
+		dataType: int64
+		formatString: 0
+		lineageTag: 65b838c4-7495-4e11-b929-de7311b1c785
+		summarizeBy: none
+		sourceColumn: Año
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre
+		dataType: int64
+		formatString: 0
+		lineageTag: c14aa3d7-93b4-4e9b-8df2-3e676ffba2e4
+		summarizeBy: sum
+		sourceColumn: Trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column Provincia
+		dataType: string
+		lineageTag: 2d5b3a8a-5a81-4335-8a49-6d676f899e16
+		summarizeBy: none
+		sourceColumn: Provincia
+
+		annotation SummarizationSetBy = Automatic
+
+	column ADSL
+		dataType: int64
+		formatString: 0
+		lineageTag: 97d607d3-1ad3-4549-83f0-6d5a3c91275e
+		summarizeBy: sum
+		sourceColumn: ADSL
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cablemodem
+		dataType: int64
+		formatString: 0
+		lineageTag: 5498155e-2975-4a53-8c8f-06b194846cf1
+		summarizeBy: sum
+		sourceColumn: Cablemodem
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Fibra óptica'
+		dataType: int64
+		formatString: 0
+		lineageTag: 26af8ce1-7fb4-4beb-8346-701981af425e
+		summarizeBy: sum
+		sourceColumn: Fibra óptica
+
+		annotation SummarizationSetBy = Automatic
+
+	column Wireless
+		dataType: int64
+		formatString: 0
+		lineageTag: 9a605bd1-17b3-4021-9730-424b60bdc1cf
+		summarizeBy: sum
+		sourceColumn: Wireless
+
+		annotation SummarizationSetBy = Automatic
+
+	column Otros
+		dataType: int64
+		formatString: 0
+		lineageTag: 0a7168be-1970-4be6-a7ad-4884e3b73faa
+		summarizeBy: sum
+		sourceColumn: Otros
+
+		annotation SummarizationSetBy = Automatic
+
+	column Total
+		dataType: int64
+		formatString: 0
+		lineageTag: 37823a43-c7c0-40f8-9645-2e72d51ee0b0
+		summarizeBy: sum
+		sourceColumn: Total
+
+		annotation SummarizationSetBy = User
+
+	partition 'Accesos Por Tecnología' = m
+		mode: import
+		source =
+				let
+				    Origen = Excel.Workbook(File.Contents("C:\Users\rubio\Documents\SoyHenry\Proyecto_Individual\Internet.xlsx"), null, true),
+				    #"Accesos Por Tecnología_Sheet" = Origen{[Item="Accesos Por Tecnología",Kind="Sheet"]}[Data],
+				    #"Encabezados promovidos" = Table.PromoteHeaders(#"Accesos Por Tecnología_Sheet", [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"Año", type text}, {"Trimestre", type text}, {"Provincia", type text}, {"ADSL", Int64.Type}, {"Cablemodem", Int64.Type}, {"Fibra óptica", Int64.Type}, {"Wireless", Int64.Type}, {"Otros", Int64.Type}, {"Total", Int64.Type}, {"Column10", type any}, {"Column11", type any}, {"Column12", type any}, {"Column13", type any}, {"Column14", type any}, {"Column15", type any}, {"Column16", type any}, {"Column17", type any}}),
+				    #"Primeros caracteres extraídos" = Table.TransformColumns(#"Tipo cambiado", {{"Año", each Text.Start(_, 4), type text}}),
+				    #"Primeros caracteres extraídos1" = Table.TransformColumns(#"Primeros caracteres extraídos", {{"Trimestre", each Text.Start(_, 1), type text}}),
+				    #"Tipo cambiado1" = Table.TransformColumnTypes(#"Primeros caracteres extraídos1",{{"Año", Int64.Type}, {"Trimestre", Int64.Type}}),
+				    #"Errores quitados" = Table.RemoveRowsWithErrors(#"Tipo cambiado1", {"Año"}),
+				    #"Filas filtradas" = Table.SelectRows(#"Errores quitados", each [Año] <> null and [Año] <> ""),
+				    #"Columnas quitadas" = Table.RemoveColumns(#"Filas filtradas",{"Column10", "Column11", "Column12", "Column13", "Column14", "Column15", "Column16", "Column17"})
+				in
+				    #"Columnas quitadas"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,132 @@
+table Accesos_tecnologia_localidad
+	lineageTag: 725f9ac3-4b8e-4a64-82da-9736c74ed8d6
+
+	column Provincia
+		dataType: string
+		lineageTag: 9a7b0a23-cc0c-4a94-a409-94d5f8b06454
+		summarizeBy: none
+		sourceColumn: Provincia
+
+		annotation SummarizationSetBy = Automatic
+
+	column Partido
+		dataType: string
+		lineageTag: b7a0c1e6-f4f5-46e1-8481-dee5b3f94c44
+		summarizeBy: none
+		sourceColumn: Partido
+
+		annotation SummarizationSetBy = Automatic
+
+	column Localidad
+		dataType: string
+		lineageTag: 6402b562-10a8-4834-981a-e8eb9fbba6d5
+		summarizeBy: none
+		sourceColumn: Localidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Link Indec'
+		dataType: string
+		lineageTag: 3d182d8f-d37a-4648-b939-41ef6fe2655b
+		summarizeBy: none
+		sourceColumn: Link Indec
+
+		annotation SummarizationSetBy = Automatic
+
+	column ADSL
+		dataType: int64
+		formatString: 0
+		lineageTag: c9b6cc90-e115-4e80-ab41-86bff69fbf42
+		summarizeBy: sum
+		sourceColumn: ADSL
+
+		annotation SummarizationSetBy = Automatic
+
+	column CABLEMODEM
+		dataType: int64
+		formatString: 0
+		lineageTag: cdaedcd5-3627-4629-8aa3-b582e60e24f9
+		summarizeBy: sum
+		sourceColumn: CABLEMODEM
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'DIAL UP'
+		dataType: int64
+		formatString: 0
+		lineageTag: 224b5cce-8d0b-4431-bae7-2d1c25b166bf
+		summarizeBy: sum
+		sourceColumn: DIAL UP
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'FIBRA OPTICA'
+		dataType: int64
+		formatString: 0
+		lineageTag: 034ec2c7-8c60-40d2-baea-73273ef801a9
+		summarizeBy: sum
+		sourceColumn: FIBRA OPTICA
+
+		annotation SummarizationSetBy = Automatic
+
+	column OTROS
+		dataType: int64
+		formatString: 0
+		lineageTag: 917b5dea-25c8-4bb1-b454-26e84eac6c97
+		summarizeBy: sum
+		sourceColumn: OTROS
+
+		annotation SummarizationSetBy = Automatic
+
+	column SATELITAL
+		dataType: int64
+		formatString: 0
+		lineageTag: 1a33f8d7-d546-42ce-b1cb-c24becea50c0
+		summarizeBy: sum
+		sourceColumn: SATELITAL
+
+		annotation SummarizationSetBy = Automatic
+
+	column WIMAX
+		dataType: int64
+		formatString: 0
+		lineageTag: 175b857e-f108-4dd0-943f-201a21d6af3d
+		summarizeBy: sum
+		sourceColumn: WIMAX
+
+		annotation SummarizationSetBy = Automatic
+
+	column WIRELESS
+		dataType: int64
+		formatString: 0
+		lineageTag: 736713c4-b5ff-4b2c-9b96-7fa675394ed1
+		summarizeBy: sum
+		sourceColumn: WIRELESS
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total general'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7b97e439-a93a-47f5-be4f-1fd4cbb90e43
+		summarizeBy: sum
+		sourceColumn: Total general
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Accesos_tecnologia_localidad = m
+		mode: import
+		source =
+				let
+				    Origen = Excel.Workbook(File.Contents("C:\Users\rubio\Documents\SoyHenry\Proyecto_Individual\Internet.xlsx"), null, true),
+				    Accesos_tecnologia_localidad_Sheet = Origen{[Item="Accesos_tecnologia_localidad",Kind="Sheet"]}[Data],
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Accesos_tecnologia_localidad_Sheet, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"Provincia", type text}, {"Partido", type text}, {"Localidad", type text}, {"Link Indec", type any}, {"ADSL", Int64.Type}, {"CABLEMODEM", Int64.Type}, {"DIAL UP", Int64.Type}, {"FIBRA OPTICA", Int64.Type}, {"OTROS", Int64.Type}, {"SATELITAL", Int64.Type}, {"WIMAX", Int64.Type}, {"WIRELESS", Int64.Type}, {"Total general", Int64.Type}, {"Column14", type any}}),
+				    #"Columnas quitadas" = Table.RemoveColumns(#"Tipo cambiado",{"Column14"})
+				in
+				    #"Columnas quitadas"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

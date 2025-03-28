@@ -1,0 +1,83 @@
+table Mapa
+	lineageTag: 266c78b5-e71b-4f61-9d82-a20bc7b6e935
+
+	column Provincia
+		dataType: string
+		lineageTag: f107ca85-01fd-41d7-a50a-d5fef6f1cbb3
+		summarizeBy: none
+		sourceColumn: Provincia
+
+		annotation SummarizationSetBy = Automatic
+
+	column Partido
+		dataType: string
+		lineageTag: b8876110-96d0-4193-a88d-4f62ca48a1ab
+		summarizeBy: none
+		sourceColumn: Partido
+
+		annotation SummarizationSetBy = Automatic
+
+	column Localidad
+		dataType: string
+		lineageTag: 736a8f1d-369b-4f45-9b0b-3ad57df9c570
+		summarizeBy: none
+		sourceColumn: Localidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column Población
+		dataType: int64
+		formatString: 0
+		lineageTag: 0f74437d-9a86-4cbf-84b5-96f74890c235
+		summarizeBy: sum
+		sourceColumn: Población
+
+		annotation SummarizationSetBy = Automatic
+
+	column Link
+		dataType: int64
+		formatString: 0
+		lineageTag: 12343b1f-54a5-4cb4-83ff-49e40dc1853f
+		summarizeBy: sum
+		sourceColumn: Link
+
+		annotation SummarizationSetBy = Automatic
+
+	column Latitud
+		dataType: double
+		lineageTag: a989984d-63cd-4b10-9221-4937725e5c9b
+		summarizeBy: sum
+		sourceColumn: Latitud
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Longitud
+		dataType: double
+		lineageTag: 0c86665e-5679-4b93-8b18-8545c43d1f1b
+		summarizeBy: sum
+		sourceColumn: Longitud
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Mapa = m
+		mode: import
+		source =
+				let
+				    Origen = Excel.Workbook(File.Contents("C:\Users\rubio\Documents\SoyHenry\Proyecto_Individual\mapa_conectividad.xlsx"), null, true),
+				    Hoja3_Sheet = Origen{[Item="Hoja3",Kind="Sheet"]}[Data],
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Hoja3_Sheet, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"Provincia", type text}, {"Partido", type text}, {"Localidad", type text}, {"Población", Int64.Type}, {"ADSL", type text}, {"Cablemódem", type text}, {"Dial Up", type text}, {"Fibra óptica", type text}, {"Satelital", type text}, {"Wireless", type text}, {"Telefonía Fija", type text}, {"3G", type text}, {"4G", type text}, {"Link", Int64.Type}, {"Latitud", type number}, {"Longitud", type number}, {"Column17", type any}, {"Column18", type any}, {"Column19", type any}, {"Column20", type any}, {"Column21", type any}}),
+				    #"Columnas quitadas" = Table.RemoveColumns(#"Tipo cambiado",{"Column17", "Column18", "Column19", "Column20", "Column21", "ADSL", "Cablemódem", "Dial Up", "Fibra óptica", "Satelital", "Wireless", "Telefonía Fija", "3G", "4G"})
+				in
+				    #"Columnas quitadas"
+
+	changedProperty = Name
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

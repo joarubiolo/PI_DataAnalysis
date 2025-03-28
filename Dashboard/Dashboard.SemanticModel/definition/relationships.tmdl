@@ -1,0 +1,71 @@
+relationship f2a97b83-fb05-3f38-1d37-68d53792b18b
+	crossFilteringBehavior: bothDirections
+	toCardinality: many
+	fromColumn: 'Accesos por velocidad'.Provincia
+	toColumn: Accesos_tecnologia_localidad.Provincia
+
+relationship 8eb91b71-923e-161b-767f-0877159b9877
+	isActive: false
+	crossFilteringBehavior: bothDirections
+	toCardinality: many
+	fromColumn: 'Accesos por velocidad'.Año
+	toColumn: Penetracion-totales.Año
+
+relationship a862a091-333b-d80c-8199-08968dd53e3c
+	crossFilteringBehavior: bothDirections
+	toCardinality: many
+	fromColumn: 'Accesos por velocidad'.Año
+	toColumn: 'Totales VMD'.Año
+
+relationship 31d355e0-75bc-b860-32e4-f644d091509c
+	crossFilteringBehavior: bothDirections
+	toCardinality: many
+	fromColumn: 'Accesos por velocidad'.Año
+	toColumn: 'Velocidad % por prov'.Año
+
+relationship fa343ddf-63ad-122c-4657-fe1e3f2a5fdb
+	isActive: false
+	crossFilteringBehavior: bothDirections
+	toCardinality: many
+	fromColumn: 'Accesos por velocidad'.Provincia
+	toColumn: 'Velocidad % por prov'.Provincia
+
+relationship 4ae6edd9-08c4-fbed-8514-81be7eda07c9
+	crossFilteringBehavior: bothDirections
+	toCardinality: many
+	fromColumn: 'Accesos por velocidad'.Año
+	toColumn: 'Accesos Por Tecnología'.Año
+
+relationship a20a5561-cbff-edb8-93f2-f17fe4ee97c8
+	crossFilteringBehavior: bothDirections
+	toCardinality: many
+	fromColumn: Ingresos.Año
+	toColumn: 'Accesos por velocidad'.Año
+
+relationship ae201a16-915a-4d53-f059-a040049c9bab
+	isActive: false
+	crossFilteringBehavior: bothDirections
+	toCardinality: many
+	fromColumn: 'Accesos Por Tecnología'.Provincia
+	toColumn: 'Velocidad % por prov'.Provincia
+
+relationship 207fb634-2bd4-25dd-c551-96573e47b708
+	isActive: false
+	crossFilteringBehavior: bothDirections
+	toCardinality: many
+	fromColumn: 'Accesos Por Tecnología'.Provincia
+	toColumn: 'Accesos por velocidad'.Provincia
+
+relationship f6c57f08-e572-1192-882e-400a19e9a1e4
+	crossFilteringBehavior: bothDirections
+	toCardinality: many
+	fromColumn: Penetracion-hogares.Año
+	toColumn: Penetración-poblacion.Año
+
+relationship d275133d-8e99-b533-0624-3a41ba907595
+	isActive: false
+	crossFilteringBehavior: bothDirections
+	toCardinality: many
+	fromColumn: Penetracion-hogares.Trimestre
+	toColumn: Penetración-poblacion.Trimestre
+

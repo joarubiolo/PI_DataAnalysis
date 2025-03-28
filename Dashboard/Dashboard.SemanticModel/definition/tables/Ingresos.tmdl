@@ -1,0 +1,104 @@
+table Ingresos
+	lineageTag: e404f604-2bea-49e2-af8a-e68b75498f08
+
+	column Año
+		dataType: double
+		formatString: 0
+		lineageTag: 2d24f247-8d92-4ed8-9959-a6bd517710af
+		summarizeBy: none
+		sourceColumn: Año
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ingresos (miles de pesos)'
+		dataType: double
+		lineageTag: bf2c6d05-89a8-458e-9535-d1b9324e4482
+		summarizeBy: sum
+		sourceColumn: Ingresos (miles de pesos)
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Ingresos (millones de pesos)'
+		dataType: double
+		lineageTag: 9c3b938a-ad3b-4d45-95f9-350af3345454
+		summarizeBy: sum
+		sourceColumn: Ingresos (millones de pesos)
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Total Ganancia'
+		dataType: double
+		lineageTag: 99545ebe-545d-4c5e-b48b-fd67c844f30d
+		summarizeBy: sum
+		sourceColumn: Total Ganancia
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Ganancia Trim'
+		dataType: string
+		lineageTag: ca475b41-373f-42d7-b3e5-ce417d0025c4
+		summarizeBy: none
+		sourceColumn: Ganancia Trim
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ganancia Anual'
+		dataType: string
+		lineageTag: 422b4b08-6101-4feb-bd97-306a862090f4
+		summarizeBy: none
+		sourceColumn: Ganancia Anual
+
+		annotation SummarizationSetBy = Automatic
+
+	column Periodo
+		dataType: string
+		lineageTag: 3194e7cc-2258-4104-82e9-7aabdb56cb13
+		summarizeBy: none
+		sourceColumn: Periodo
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Año y Periodo'
+		dataType: string
+		lineageTag: f55fbb79-6510-4bb1-9446-7f2242f859b0
+		summarizeBy: none
+		sourceColumn: Año y Periodo
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Ingresos = m
+		mode: import
+		source =
+				let
+				    Origen = Excel.Workbook(File.Contents("C:\Users\rubio\Documents\SoyHenry\Proyecto_Individual\Ingresos.xlsx"), null, true),
+				    Sheet1_Sheet = Origen{[Item="Sheet1",Kind="Sheet"]}[Data],
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Sheet1_Sheet, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"Column1", Int64.Type}, {"Año", Int64.Type}, {"Trimestre", Int64.Type}, {"Ingresos (miles de pesos)", type number}, {"Periodo", type text}, {"Ingresos (millones de pesos)", type number}, {"Total Ganancia", type number}, {"Ganancia Trim", type number}, {"Ganancia Anual", type number}}),
+				    #"Columnas quitadas" = Table.RemoveColumns(#"Tipo cambiado",{"Column1"}),
+				    #"Valor reemplazado" = Table.ReplaceValue(#"Columnas quitadas",2033,2023,Replacer.ReplaceValue,{"Año"}),
+				    #"Primeros caracteres extraídos" = Table.TransformColumns(#"Valor reemplazado", {{"Periodo", each Text.Start(_, 7), type text}}),
+				    #"Columna combinada insertada" = Table.AddColumn(#"Primeros caracteres extraídos", "Combinada", each Text.Combine({Text.From([Año], "es-419"), " ", [Periodo]}), type text),
+				    #"Columnas con nombre cambiado" = Table.RenameColumns(#"Columna combinada insertada",{{"Combinada", "Año - Periodo"}}),
+				    #"Columnas quitadas1" = Table.RemoveColumns(#"Columnas con nombre cambiado",{"Año - Periodo"}),
+				    #"Columna combinada insertada1" = Table.AddColumn(#"Columnas quitadas1", "Combinada", each Text.Combine({Text.From([Trimestre], "es-419"), " ", [Periodo]}), type text),
+				    #"Columnas quitadas2" = Table.RemoveColumns(#"Columna combinada insertada1",{"Periodo"}),
+				    #"Columnas con nombre cambiado1" = Table.RenameColumns(#"Columnas quitadas2",{{"Combinada", "Periodo"}}),
+				    #"Columnas quitadas3" = Table.RemoveColumns(#"Columnas con nombre cambiado1",{"Trimestre"}),
+				    Redondeado = Table.TransformColumns(#"Columnas quitadas3",{{"Ganancia Trim", each Number.Round(_, 1), type number}}),
+				    #"Sufijo agregado" = Table.TransformColumns(Redondeado, {{"Ganancia Trim", each Text.From(_, "es-419") & "%", type text}}),
+				    Redondeado1 = Table.TransformColumns(#"Sufijo agregado",{{"Ganancia Anual", each Number.Round(_, 1), type number}}),
+				    #"Sufijo agregado1" = Table.TransformColumns(Redondeado1, {{"Ganancia Anual", each Text.From(_, "es-419") & "%", type text}}),
+				    #"Columna combinada insertada2" = Table.AddColumn(#"Sufijo agregado1", "Año y Periodo", each Text.Combine({Text.From([Año], "es-419"), " ", [Periodo]}), type text)
+				in
+				    #"Columna combinada insertada2"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegación
+

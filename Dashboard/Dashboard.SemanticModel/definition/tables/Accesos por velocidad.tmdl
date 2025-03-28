@@ -1,0 +1,148 @@
+table 'Accesos por velocidad'
+	lineageTag: f09bbdfd-c37e-4a6f-959b-294c48637a41
+
+	measure AdopcionMasDe30Mbps = ```
+			
+			DIVIDE(
+			    SUMX(
+			        FILTER('Accesos por velocidad', 'Accesos por velocidad'[+ 30 Mbps]),
+			        'Accesos por velocidad'[Total]
+			    ),
+			    SUM('Accesos por velocidad'[Total])
+			) * 100
+			
+			```
+		lineageTag: ecb0ec05-7fbe-43e1-a4e8-5990ac13f0da
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure KPI3 =
+			
+			AVERAGE('Accesos por velocidad'[+ 30 Mbps])*'Accesos por velocidad'[AdopcionMasDe30Mbps]/100
+		lineageTag: 3d1f711b-a4c3-47db-8293-6d00dc60f4d1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Año
+		dataType: int64
+		formatString: 0
+		lineageTag: 6d9d4dd9-f980-48c7-9c06-e5e7b4590482
+		summarizeBy: none
+		sourceColumn: Año
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre
+		dataType: int64
+		formatString: 0
+		lineageTag: 0f18e2e5-d1ab-481c-9893-7bdc1c93b7b6
+		summarizeBy: sum
+		sourceColumn: Trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column Provincia
+		dataType: string
+		lineageTag: 13e236f8-45f8-4c75-8979-c77e302c4e5f
+		summarizeBy: none
+		sourceColumn: Provincia
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'HASTA 512 kbps'
+		dataType: int64
+		formatString: 0
+		lineageTag: f12b48f1-141c-46e7-a127-25cac770f623
+		summarizeBy: sum
+		sourceColumn: HASTA 512 kbps
+
+		annotation SummarizationSetBy = Automatic
+
+	column '+ 512 Kbps - 1 Mbps'
+		dataType: int64
+		formatString: 0
+		lineageTag: 66dde826-61c2-45e5-81e5-e952622cc392
+		summarizeBy: sum
+		sourceColumn: + 512 Kbps - 1 Mbps
+
+		annotation SummarizationSetBy = Automatic
+
+	column '+ 1 Mbps - 6 Mbps'
+		dataType: int64
+		formatString: 0
+		lineageTag: ce31e2d3-b782-4020-8841-e30c24cdeeae
+		summarizeBy: sum
+		sourceColumn: + 1 Mbps - 6 Mbps
+
+		annotation SummarizationSetBy = Automatic
+
+	column '+ 6 Mbps - 10 Mbps'
+		dataType: int64
+		formatString: 0
+		lineageTag: 731de7c1-27da-43be-ab63-7c550d9c6767
+		summarizeBy: sum
+		sourceColumn: + 6 Mbps - 10 Mbps
+
+		annotation SummarizationSetBy = Automatic
+
+	column '+ 10 Mbps - 20 Mbps'
+		dataType: int64
+		formatString: 0
+		lineageTag: 0a348639-b292-4bd4-a719-b43d683f7a05
+		summarizeBy: sum
+		sourceColumn: + 10 Mbps - 20 Mbps
+
+		annotation SummarizationSetBy = Automatic
+
+	column '+ 20 Mbps - 30 Mbps'
+		dataType: int64
+		formatString: 0
+		lineageTag: aba70d59-b9b1-41c4-9aba-9e7108e1009e
+		summarizeBy: sum
+		sourceColumn: + 20 Mbps - 30 Mbps
+
+		annotation SummarizationSetBy = Automatic
+
+	column '+ 30 Mbps'
+		dataType: int64
+		formatString: 0
+		lineageTag: ac4eb46f-9e5d-4090-9822-21e09760f311
+		summarizeBy: sum
+		sourceColumn: + 30 Mbps
+
+		annotation SummarizationSetBy = Automatic
+
+	column OTROS
+		dataType: int64
+		formatString: 0
+		lineageTag: 564d151b-460a-4ead-bb8b-d722f8eba401
+		summarizeBy: sum
+		sourceColumn: OTROS
+
+		annotation SummarizationSetBy = Automatic
+
+	column Total
+		dataType: int64
+		formatString: 0
+		lineageTag: 18904c06-a2ec-4d1b-9a1d-9335cadd880b
+		summarizeBy: sum
+		sourceColumn: Total
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Accesos por velocidad' = m
+		mode: import
+		source =
+				let
+				    Origen = Excel.Workbook(File.Contents("C:\Users\rubio\Documents\SoyHenry\Proyecto_Individual\Internet.xlsx"), null, true),
+				    #"Accesos por velocidad_Sheet" = Origen{[Item="Accesos por velocidad",Kind="Sheet"]}[Data],
+				    #"Encabezados promovidos" = Table.PromoteHeaders(#"Accesos por velocidad_Sheet", [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"Año", Int64.Type}, {"Trimestre", Int64.Type}, {"Provincia", type text}, {"HASTA 512 kbps", Int64.Type}, {"+ 512 Kbps - 1 Mbps", Int64.Type}, {"+ 1 Mbps - 6 Mbps", Int64.Type}, {"+ 6 Mbps - 10 Mbps", Int64.Type}, {"+ 10 Mbps - 20 Mbps", Int64.Type}, {"+ 20 Mbps - 30 Mbps", Int64.Type}, {"+ 30 Mbps", Int64.Type}, {"OTROS", Int64.Type}, {"Total", Int64.Type}, {"Column13", type any}, {"Column14", type any}, {"Column15", type any}, {"Column16", type any}, {"Column17", type any}, {"Column18", type any}, {"Column19", type any}, {"Column20", type any}, {"Column21", type any}, {"Column22", type any}, {"Column23", type any}, {"Column24", type any}}),
+				    #"Columnas quitadas" = Table.RemoveColumns(#"Tipo cambiado",{"Column13", "Column14", "Column15", "Column16", "Column17", "Column18", "Column19", "Column20", "Column21", "Column22", "Column23", "Column24"})
+				in
+				    #"Columnas quitadas"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,129 @@
+table vel-tec
+	lineageTag: b0800db0-4fff-4c87-bc28-679be9094e6f
+
+	column Provincia
+		dataType: string
+		lineageTag: 3bfc04dc-4adc-4aa4-831c-8f3917b1af0b
+		summarizeBy: none
+		sourceColumn: Provincia
+
+		annotation SummarizationSetBy = Automatic
+
+	column ADSL
+		dataType: int64
+		formatString: 0
+		lineageTag: 55cc6884-b0ca-4b28-8a75-627f8c348325
+		summarizeBy: sum
+		sourceColumn: ADSL
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cablemodem
+		dataType: int64
+		formatString: 0
+		lineageTag: 75640fcb-cdd8-4237-8398-433dbe9cfc66
+		summarizeBy: sum
+		sourceColumn: Cablemodem
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Fibra óptica'
+		dataType: int64
+		formatString: 0
+		lineageTag: bc1083f3-a373-4a7a-8d98-74d0771b5928
+		summarizeBy: sum
+		sourceColumn: Fibra óptica
+
+		annotation SummarizationSetBy = Automatic
+
+	column Wireless
+		dataType: int64
+		formatString: 0
+		lineageTag: 2751ebcb-b1b8-435d-9ca2-405b5344a530
+		summarizeBy: sum
+		sourceColumn: Wireless
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'HASTA 512 kbps'
+		dataType: int64
+		formatString: 0
+		lineageTag: f2e5a70a-1228-484a-b965-bc0b82d3a2df
+		summarizeBy: sum
+		sourceColumn: HASTA 512 kbps
+
+		annotation SummarizationSetBy = Automatic
+
+	column '+ 512 Kbps - 1 Mbps'
+		dataType: int64
+		formatString: 0
+		lineageTag: 28d80a8b-1ecf-40a5-91e4-ccb55926e8a0
+		summarizeBy: sum
+		sourceColumn: + 512 Kbps - 1 Mbps
+
+		annotation SummarizationSetBy = Automatic
+
+	column '+ 1 Mbps - 6 Mbps'
+		dataType: int64
+		formatString: 0
+		lineageTag: de44481d-c4cb-4085-b0cf-9f32d2efe424
+		summarizeBy: sum
+		sourceColumn: + 1 Mbps - 6 Mbps
+
+		annotation SummarizationSetBy = Automatic
+
+	column '+ 6 Mbps - 10 Mbps'
+		dataType: int64
+		formatString: 0
+		lineageTag: 3b6c6229-648c-4f1a-a188-e90b0f9b4756
+		summarizeBy: sum
+		sourceColumn: + 6 Mbps - 10 Mbps
+
+		annotation SummarizationSetBy = Automatic
+
+	column '+ 10 Mbps - 20 Mbps'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7d84d426-4eb0-4bc5-b4ca-864307f11f22
+		summarizeBy: sum
+		sourceColumn: + 10 Mbps - 20 Mbps
+
+		annotation SummarizationSetBy = Automatic
+
+	column '+ 20 Mbps - 30 Mbps'
+		dataType: int64
+		formatString: 0
+		lineageTag: b4d06c2b-0892-47cd-9bbd-8859fe63c12d
+		summarizeBy: sum
+		sourceColumn: + 20 Mbps - 30 Mbps
+
+		annotation SummarizationSetBy = Automatic
+
+	column '+ 30 Mbps'
+		dataType: int64
+		formatString: 0
+		lineageTag: 506f1791-7917-4e98-83b8-5877ce14de65
+		summarizeBy: sum
+		sourceColumn: + 30 Mbps
+
+		annotation SummarizationSetBy = Automatic
+
+	partition vel-tec = m
+		mode: import
+		source =
+				let
+				    Origen = Excel.Workbook(File.Contents("C:\Users\rubio\Documents\SoyHenry\Proyecto_Individual\vel y tec.xlsx"), null, true),
+				    Sheet1_Sheet = Origen{[Item="Sheet1",Kind="Sheet"]}[Data],
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Sheet1_Sheet, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"Column1", Int64.Type}, {"Fecha", type text}, {"Año", Int64.Type}, {"Trimestre", Int64.Type}, {"Provincia", type text}, {"ADSL", Int64.Type}, {"Cablemodem", Int64.Type}, {"Fibra óptica", Int64.Type}, {"Wireless", Int64.Type}, {"Otros", Int64.Type}, {"HASTA 512 kbps", Int64.Type}, {"+ 512 Kbps - 1 Mbps", Int64.Type}, {"+ 1 Mbps - 6 Mbps", Int64.Type}, {"+ 6 Mbps - 10 Mbps", Int64.Type}, {"+ 10 Mbps - 20 Mbps", Int64.Type}, {"+ 20 Mbps - 30 Mbps", Int64.Type}, {"+ 30 Mbps", Int64.Type}, {"OTROS", Int64.Type}, {"Total", Int64.Type}}),
+				    #"Columnas con nombre cambiado" = Table.RenameColumns(#"Tipo cambiado",{{"OTROS", "OTROS.1"}}),
+				    #"Columnas quitadas" = Table.RemoveColumns(#"Columnas con nombre cambiado",{"Column1", "Fecha", "Año", "Trimestre", "Otros", "OTROS.1", "Total"}),
+				    #"Filas filtradas" = Table.SelectRows(#"Columnas quitadas", each true),
+				    #"Filas filtradas1" = Table.SelectRows(#"Filas filtradas", each [Provincia] <> null and [Provincia] <> "")
+				in
+				    #"Filas filtradas1"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+
